@@ -21,8 +21,7 @@ import java.util.Map;
 import java.util.Random;
 
 @WebServlet(name = "AuthController", value = "/auth/*")
-public class AuthController extends HttpServlet
-{
+public class AuthController extends HttpServlet {
     private final String pepper = "TOI IU NLU-FIT";
 
     private AuthService authService;
@@ -30,65 +29,50 @@ public class AuthController extends HttpServlet
 
 
     @Override
-    public void init() throws ServletException
-    {
+    public void init() throws ServletException {
         this.authService = new AuthService();
         this.mailService = new MailService();
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
 
         String action = pathInfo.substring(1);
 
 
-        switch (action)
-        {
-            case "login" ->
-            {
-                try
-                {
+        switch (action) {
+            case "login" -> {
+                try {
                     this.handleLogin(request, response);
-                } catch (NoSuchAlgorithmException e)
-                {
+                } catch (NoSuchAlgorithmException e) {
                     throw new RuntimeException(e);
                 }
             }
-            case "logout" ->
-            {
+            case "logout" -> {
                 HttpSession session = request.getSession(false);
-                if (session != null)
-                {
+                if (session != null) {
                     session.invalidate();
                 }
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
             }
-            case "register" ->
-            {
-                try
-                {
+            case "register" -> {
+                try {
                     this.handleRegister(request, response);
-                } catch (NoSuchAlgorithmException e)
-                {
+                } catch (NoSuchAlgorithmException e) {
                     throw new RuntimeException(e);
                 }
             }
-            case "forgot-pass" ->
-            {
+            case "forgot-pass" -> {
                 this.handleForgotPassword(request, response);
             }
-            case "verify"->
-            {
+            case "verify" -> {
                 this.handleVerifyAccount(request, response);
             }
-            case "change-pass"->
-            {
+            case "change-pass" -> {
                 this.verifyForgotPassword(request, response);
             }
-            case "reset-pass"->
-            {
+            case "reset-pass" -> {
                 try {
                     this.handleResetPass(request, response);
                 } catch (NoSuchAlgorithmException e) {
@@ -100,36 +84,27 @@ public class AuthController extends HttpServlet
     }
 
 
-
-
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 
 
-
-    private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchAlgorithmException
-    {
+    private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchAlgorithmException {
         String method = request.getMethod();
 
-        switch (method)
-        {
-            case "GET" ->
-            {
+        switch (method) {
+            case "GET" -> {
                 response.sendRedirect("/index.jsp");
             }
-            case "POST" ->
-            {
+            case "POST" -> {
                 String input = request.getParameter("login_account");
                 String password = request.getParameter("login_password");
 
                 // 1. Tìm user theo email hoặc phone
                 User user = this.authService.findByEmailOrPhone(input);
 
-                if (user == null)
-                {
+                if (user == null) {
                     request.setAttribute("loginError", "Tài khoản không tồn tại");
                     request.setAttribute("activeTab", "login");
                     request.getRequestDispatcher("/index.jsp").forward(request, response);
@@ -137,8 +112,7 @@ public class AuthController extends HttpServlet
                 }
 
                 // 2. Check user đã verified chưa
-                if (!user.checkVerified())
-                {
+                if (!user.checkVerified()) {
                     request.setAttribute("loginError", "Tài khoản chưa được xác thực. Vui lòng check email.");
                     request.setAttribute("activeTab", "login");
                     request.getRequestDispatcher("/index.jsp").forward(request, response);
@@ -153,8 +127,7 @@ public class AuthController extends HttpServlet
                 String inputHash = this.authService.hashPasswordUsingMD5(password, salt, pepper);
                 System.out.println("inputHash: " + inputHash);
                 // 4. So sánh hash
-                if (!inputHash.equals(storedHash))
-                {
+                if (!inputHash.equals(storedHash)) {
                     request.setAttribute("loginError", "Mật khẩu không đúng");
                     request.setAttribute("activeTab", "login");
                     request.getRequestDispatcher("/index.jsp").forward(request, response);
@@ -172,11 +145,9 @@ public class AuthController extends HttpServlet
 
                 System.out.println(user.getRole());
                 // 6. Redirect
-                if("customer".equalsIgnoreCase(user.getRole().toString()))
-                {
+                if ("customer".equalsIgnoreCase(user.getRole().toString())) {
                     response.sendRedirect(request.getContextPath() + "/home");
-                }else
-                {
+                } else {
                     response.sendRedirect(request.getContextPath() + "/admin/dashboard");
                 }
 
@@ -185,18 +156,14 @@ public class AuthController extends HttpServlet
 
     }
 
-    private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchAlgorithmException
-    {
+    private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchAlgorithmException {
         String method = request.getMethod();
 
-        switch (method)
-        {
-            case "GET" ->
-            {
+        switch (method) {
+            case "GET" -> {
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
-            case "POST" ->
-            {
+            case "POST" -> {
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
                 String confirm_password = request.getParameter("confirm_password");
@@ -214,8 +181,7 @@ public class AuthController extends HttpServlet
 
                 ValidateObject errors = this.authService.validateRegistration(username, password, confirm_password, email, phone);
 
-                if(errors.hasError())
-                {
+                if (errors.hasError()) {
                     request.setAttribute("errors", errors);
                     request.setAttribute("activeTab", "register");
 
@@ -229,15 +195,12 @@ public class AuthController extends HttpServlet
                 }
 
 
-
-
                 //hash password
                 String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
                 Random ran = new Random();
                 int length = 16; // Độ dài salt
                 StringBuilder salt = new StringBuilder();
-                for (int i = 0; i < length; i++)
-                {
+                for (int i = 0; i < length; i++) {
                     salt.append(CHARACTERS.charAt(ran.nextInt(CHARACTERS.length())));
                 }
                 String hashed_password = this.authService.hashPasswordUsingMD5(password, salt.toString(), pepper);
@@ -246,13 +209,11 @@ public class AuthController extends HttpServlet
                 int userId = this.authService.createNewUser(username, hashed_password, email, phone, salt.toString());
 
 
-
-
                 //verify email
                 String emptyTokenLink = this.mailService.createVerifyLink(request);
                 String token = this.mailService.createVerifyToken();
 
-                String verifyLink = emptyTokenLink+token;
+                String verifyLink = emptyTokenLink + token;
                 int minutes = 10;
                 Timestamp expirationTime = this.mailService.createExpirationTime(minutes);
 
@@ -266,89 +227,85 @@ public class AuthController extends HttpServlet
     }
 
 
-    private void handleVerifyAccount(HttpServletRequest request, HttpServletResponse response) throws IOException
-    {
+    private void handleVerifyAccount(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String token = request.getParameter("token");
 
         boolean valid = this.authService.checkToken(token, "VERIFY_EMAIL");
         System.out.println("valid: " + valid);
-        if(!valid) response.sendRedirect(request.getContextPath()+"/index.jsp");
+        if (!valid) response.sendRedirect(request.getContextPath() + "/index.jsp");
 
 
         int userId = this.authService.getUserIdFromVerifyToken(token);
         System.out.println("id: " + userId);
-        if(userId == -1) response.sendRedirect(request.getContextPath()+"/index.jsp");
+        if (userId == -1) response.sendRedirect(request.getContextPath() + "/index.jsp");
 
         //set verify for user
         boolean success = this.authService.setVerifyUser(userId);
         System.out.println("Success: " + success);
-        if(!success) response.sendRedirect(request.getContextPath()+"/index.jsp");
-
+        if (!success) response.sendRedirect(request.getContextPath() + "/index.jsp");
 
 
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter writer = response.getWriter();
         String contextPath = request.getContextPath();
         writer.println("""
-                <!DOCTYPE html>
-                       <html lang="vi">
-                       <head>
-                           <meta charset="UTF-8">
-                           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                           <title>Xác thực thành công - MiChiShop</title>
-                           <style>
-                               @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-                               @keyframes scaleIn{from{transform:scale(0)}to{transform:scale(1)}}
-                               @keyframes checkmark{0%%{stroke-dashoffset:50}100%%{stroke-dashoffset:0}}
-                               .container{animation:slideUp .5s ease}
-                               .icon{animation:scaleIn .4s cubic-bezier(.68,-.55,.265,1.55) .2s both}
-                               .checkmark{stroke-dasharray:50;stroke-dashoffset:50;animation:checkmark .4s ease .5s forwards}
-                           </style>
-                           <script>
-                               let t=5;setInterval(()=>{if(--t>0)document.querySelector('.time').textContent=t;else window.location.href='%s/index.jsp'},1000);
-                           </script>
-                       </head>
-                       <body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F564A9;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;">
-                           <div class="container" style="background:#fff;border-radius:24px;max-width:420px;width:100%%;padding:48px 32px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.15);">
-                               <div class="icon" style="width:72px;height:72px;background:linear-gradient(135deg,#4CAF50,#66BB6A);border-radius:50%%;display:flex;align-items:center;justify-content:center;margin:0 auto 32px;box-shadow:0 8px 24px rgba(76,175,80,.3);">
-                                   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline class="checkmark" points="20 6 9 17 4 12"></polyline></svg>
+                    <!DOCTYPE html>
+                           <html lang="vi">
+                           <head>
+                               <meta charset="UTF-8">
+                               <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                               <title>Xác thực thành công - MiChiShop</title>
+                               <style>
+                                   @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+                                   @keyframes scaleIn{from{transform:scale(0)}to{transform:scale(1)}}
+                                   @keyframes checkmark{0%%{stroke-dashoffset:50}100%%{stroke-dashoffset:0}}
+                                   .container{animation:slideUp .5s ease}
+                                   .icon{animation:scaleIn .4s cubic-bezier(.68,-.55,.265,1.55) .2s both}
+                                   .checkmark{stroke-dasharray:50;stroke-dashoffset:50;animation:checkmark .4s ease .5s forwards}
+                               </style>
+                               <script>
+                                   let t=5;setInterval(()=>{if(--t>0)document.querySelector('.time').textContent=t;else window.location.href='%s/index.jsp'},1000);
+                               </script>
+                           </head>
+                           <body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F564A9;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;">
+                               <div class="container" style="background:#fff;border-radius:24px;max-width:420px;width:100%%;padding:48px 32px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.15);">
+                                   <div class="icon" style="width:72px;height:72px;background:linear-gradient(135deg,#4CAF50,#66BB6A);border-radius:50%%;display:flex;align-items:center;justify-content:center;margin:0 auto 32px;box-shadow:0 8px 24px rgba(76,175,80,.3);">
+                                       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline class="checkmark" points="20 6 9 17 4 12"></polyline></svg>
+                                   </div>
+                                   <h1 style="color:#F564A9;font-size:24px;font-weight:600;margin:0 0 12px;letter-spacing:-.5px;">Xác thực thành công</h1>
+                                   <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0 0 32px;">Tài khoản đã được kích hoạt. Đăng nhập để bắt đầu mua sắm tại MiChiShop.</p>
+                                   <a href="%s/index.jsp" style="display:inline-flex;align-items:center;gap:8px;background:#F564A9;color:#fff;text-decoration:none;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:500;transition:all .2s;box-shadow:0 4px 12px rgba(245,100,169,.3);">
+                                       Đăng nhập ngay
+                                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                   </a>
+                                   <p style="margin:24px 0 0;font-size:13px;color:#94a3b8;">Tự động chuyển sau <span class="time" style="color:#F564A9;font-weight:600;">5</span>s</p>
                                </div>
-                               <h1 style="color:#F564A9;font-size:24px;font-weight:600;margin:0 0 12px;letter-spacing:-.5px;">Xác thực thành công</h1>
-                               <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0 0 32px;">Tài khoản đã được kích hoạt. Đăng nhập để bắt đầu mua sắm tại MiChiShop.</p>
-                               <a href="%s/index.jsp" style="display:inline-flex;align-items:center;gap:8px;background:#F564A9;color:#fff;text-decoration:none;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:500;transition:all .2s;box-shadow:0 4px 12px rgba(245,100,169,.3);">
-                                   Đăng nhập ngay
-                                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                               </a>
-                               <p style="margin:24px 0 0;font-size:13px;color:#94a3b8;">Tự động chuyển sau <span class="time" style="color:#F564A9;font-weight:600;">5</span>s</p>
-                           </div>
-                       </body>
-                       </html>
-            """.formatted(contextPath, contextPath));
+                           </body>
+                           </html>
+                """.formatted(contextPath, contextPath));
 
 
     }
 
 
-    private void handleForgotPassword(HttpServletRequest request, HttpServletResponse response) throws IOException
-    {
+    private void handleForgotPassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
 
-        System.out.println("email: "+email);
+        System.out.println("email: " + email);
 
         User user = this.authService.findByEmailOrPhone(email);
 
         String emptyTokenLink = this.mailService.createVerifyForgotPassLink(request);
         String token = this.mailService.createVerifyToken();
 
-        String verifyLink = emptyTokenLink+token;
+        String verifyLink = emptyTokenLink + token;
         int minutes = 10;
         Timestamp expirationTime = this.mailService.createExpirationTime(minutes);
 
         this.authService.createTokenAndExpiredTime(user.getId(), token, expirationTime, "FORGOT_PASS"); //luu vao db
 
         boolean success = this.mailService.sendVerifyPasswordResetLink(email, user.getName(), verifyLink, minutes);
-
 
 
         Map<String, Object> res = new HashMap<>();
@@ -362,20 +319,17 @@ public class AuthController extends HttpServlet
 
     }
 
-    private void verifyForgotPassword(HttpServletRequest request, HttpServletResponse response) throws IOException
-    {
+    private void verifyForgotPassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getParameter("token");
 
         boolean valid = this.authService.checkToken(token, "FORGOT_PASS");
-        if (!valid)
-        {
+        if (!valid) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
         int userId = this.authService.getUserIdFromVerifyToken(token);
-        if (userId == -1)
-        {
+        if (userId == -1) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
@@ -385,83 +339,82 @@ public class AuthController extends HttpServlet
         String contextPath = request.getContextPath();
 
         writer.println("""
-        <!DOCTYPE html>
-        <html lang="vi">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Đặt mật khẩu mới - MiChiShop</title>
-            <style>
-                body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-                       background:#F564A9; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
-                .container { background:#fff; border-radius:24px; max-width:420px; width:100%%; padding:48px 32px; text-align:center;
-                             box-shadow:0 20px 60px rgba(0,0,0,.15);}
-                input { width:100%%; padding:12px 16px; margin:8px 0; border:1px solid #ccc; border-radius:8px; font-size:14px; }
-                button { background:#F564A9; color:#fff; border:none; padding:14px 32px; border-radius:12px; font-size:15px;
-                         font-weight:500; cursor:pointer; margin-top:16px; }
-                .msg { margin-top:16px; font-size:14px; color:red; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1 style="color:#F564A9;">Đặt mật khẩu mới</h1>
-                <p>Vui lòng nhập mật khẩu mới cho tài khoản của bạn.</p>
-                <form id="reset-pass-form">
-                    <input type="password" id="new-pass" placeholder="Mật khẩu mới" required>
-                    <input type="password" id="confirm-pass" placeholder="Xác nhận mật khẩu" required>
-                    <input type="hidden" id="token" value="%s">
-                    <button type="submit">Đổi mật khẩu</button>
-                    <p class="msg" id="msg"></p>
-                </form>
-            </div>
-            <script>
-                const form = document.getElementById("reset-pass-form");
-                const msg = document.getElementById("msg");
-
-                form.addEventListener("submit", async (e) => {
-                    e.preventDefault();
-                    const pass = document.getElementById("new-pass").value.trim();
-                    const confirm = document.getElementById("confirm-pass").value.trim();
-                    const token = document.getElementById("token").value;
-
-                    if(pass.length < 6) {
-                        msg.textContent = "Mật khẩu tối thiểu 6 ký tự";
-                        return;
-                    }
-                    if(pass !== confirm) {
-                        msg.textContent = "Mật khẩu xác nhận không khớp";
-                        return;
-                    }
-
-                    try {
-                        const res = await fetch("%s/auth/reset-pass", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ token, password: pass })
-                        });
-                        const data = await res.json();
-                        if(data.success){
-                            msg.style.color = "green";
-                            msg.textContent = "Đổi mật khẩu thành công! Chuyển hướng đến đăng nhập...";
-                            setTimeout(()=>{ window.location.href="%s/index.jsp"; }, 3000);
-                        } else {
-                            msg.style.color = "red";
-                            msg.textContent = data.message || "Có lỗi xảy ra!";
-                        }
-                    } catch(err) {
-                        console.error(err);
-                        msg.style.color = "red";
-                        msg.textContent = "Có lỗi xảy ra!";
-                    }
-                });
-            </script>
-        </body>
-        </html>
-    """.formatted(token, contextPath, contextPath));
+                    <!DOCTYPE html>
+                    <html lang="vi">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Đặt mật khẩu mới - MiChiShop</title>
+                        <style>
+                            body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+                                   background:#F564A9; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+                            .container { background:#fff; border-radius:24px; max-width:420px; width:100%%; padding:48px 32px; text-align:center;
+                                         box-shadow:0 20px 60px rgba(0,0,0,.15);}
+                            input { width:100%%; padding:12px 16px; margin:8px 0; border:1px solid #ccc; border-radius:8px; font-size:14px; }
+                            button { background:#F564A9; color:#fff; border:none; padding:14px 32px; border-radius:12px; font-size:15px;
+                                     font-weight:500; cursor:pointer; margin-top:16px; }
+                            .msg { margin-top:16px; font-size:14px; color:red; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <h1 style="color:#F564A9;">Đặt mật khẩu mới</h1>
+                            <p>Vui lòng nhập mật khẩu mới cho tài khoản của bạn.</p>
+                            <form id="reset-pass-form">
+                                <input type="password" id="new-pass" placeholder="Mật khẩu mới" required>
+                                <input type="password" id="confirm-pass" placeholder="Xác nhận mật khẩu" required>
+                                <input type="hidden" id="token" value="%s">
+                                <button type="submit">Đổi mật khẩu</button>
+                                <p class="msg" id="msg"></p>
+                            </form>
+                        </div>
+                        <script>
+                            const form = document.getElementById("reset-pass-form");
+                            const msg = document.getElementById("msg");
+                
+                            form.addEventListener("submit", async (e) => {
+                                e.preventDefault();
+                                const pass = document.getElementById("new-pass").value.trim();
+                                const confirm = document.getElementById("confirm-pass").value.trim();
+                                const token = document.getElementById("token").value;
+                
+                                if(pass.length < 6) {
+                                    msg.textContent = "Mật khẩu tối thiểu 6 ký tự";
+                                    return;
+                                }
+                                if(pass !== confirm) {
+                                    msg.textContent = "Mật khẩu xác nhận không khớp";
+                                    return;
+                                }
+                
+                                try {
+                                    const res = await fetch("%s/auth/reset-pass", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ token, password: pass })
+                                    });
+                                    const data = await res.json();
+                                    if(data.success){
+                                        msg.style.color = "green";
+                                        msg.textContent = "Đổi mật khẩu thành công! Chuyển hướng đến đăng nhập...";
+                                        setTimeout(()=>{ window.location.href="%s/index.jsp"; }, 3000);
+                                    } else {
+                                        msg.style.color = "red";
+                                        msg.textContent = data.message || "Có lỗi xảy ra!";
+                                    }
+                                } catch(err) {
+                                    console.error(err);
+                                    msg.style.color = "red";
+                                    msg.textContent = "Có lỗi xảy ra!";
+                                }
+                            });
+                        </script>
+                    </body>
+                    </html>
+                """.formatted(token, contextPath, contextPath));
     }
 
-    private void handleResetPass(HttpServletRequest request, HttpServletResponse response) throws NoSuchAlgorithmException, IOException
-    {
+    private void handleResetPass(HttpServletRequest request, HttpServletResponse response) throws NoSuchAlgorithmException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
@@ -478,14 +431,14 @@ public class AuthController extends HttpServlet
             String password = body.get("password");
             String token = body.get("token");
 
-            if(password == null || token == null) {
+            if (password == null || token == null) {
                 out.write(gson.toJson(Map.of("success", false, "message", "Dữ liệu không hợp lệ")));
                 return;
             }
 
             // Lấy userId từ token
             int userId = this.authService.getUserIdFromVerifyToken(token);
-            if(userId == -1){
+            if (userId == -1) {
                 out.write(gson.toJson(Map.of("success", false, "message", "Token không hợp lệ")));
                 return;
             }
@@ -494,20 +447,20 @@ public class AuthController extends HttpServlet
             String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             Random ran = new Random();
             StringBuilder salt = new StringBuilder();
-            for (int i = 0; i < 16; i++){
+            for (int i = 0; i < 16; i++) {
                 salt.append(CHARACTERS.charAt(ran.nextInt(CHARACTERS.length())));
             }
             String hashed_password = this.authService.hashPasswordUsingMD5(password, salt.toString(), pepper);
 
             boolean success = this.authService.setNewPassword(userId, hashed_password, salt);
 
-            if(success){
+            if (success) {
                 out.write(gson.toJson(Map.of("success", true)));
             } else {
                 out.write(gson.toJson(Map.of("success", false, "message", "Không thể cập nhật mật khẩu")));
             }
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             out.write(gson.toJson(Map.of("success", false, "message", "Có lỗi xảy ra!")));
         }

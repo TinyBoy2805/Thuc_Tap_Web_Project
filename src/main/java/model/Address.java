@@ -6,7 +6,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
-
+@Getter
 public class Address implements Serializable
 {
     private long id;
@@ -38,27 +38,6 @@ public class Address implements Serializable
         return this.isDefault;
     }
 
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
-    public long getUserId() { return userId; }
-    public void setUserId(long userId) { this.userId = userId; }
 
-    public String getHouseNumber() { return houseNumber; }
-    public void setHouseNumber(String houseNumber) { this.houseNumber = houseNumber; }
-
-    public String getRoad() { return road; }
-    public void setRoad(String road) { this.road = road; }
-
-    public String getDistrict() { return district; }
-    public void setDistrict(String district) { this.district = district; }
-
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
-
-    public String getHamlet() { return hamlet; }
-    public void setHamlet(String hamlet) { this.hamlet = hamlet; }
-
-    public String getWard() { return ward; }
-    public void setWard(String ward) { this.ward = ward; }
 
 }

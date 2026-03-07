@@ -24,7 +24,7 @@ public class AddressDao extends BaseDao {
                     rs.getBoolean("is_default")
                 ))
                 .findOne()
-                .orElse(null)
+                .orElseThrow(() -> new RuntimeException("Khong tim thay"))
         );
     }
 

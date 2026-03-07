@@ -2,6 +2,10 @@ package controller;
 
 import ch.qos.logback.core.encoder.JsonEscapeUtil;
 import com.google.gson.Gson;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,11 +21,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@OpenAPIDefinition(
+        info = @Info(
+                title = "MiChiShop API",
+                version = "1.0",
+                description = "Hệ thống quản lý cửa hàng thương mại điện tử"
+        )
+)
 @WebServlet(name = "DashboardController", value = "/admin/dashboard/*")
 public class DashboardController extends HttpServlet {
     private final DashboardService dashboardService = new DashboardService();
     private final Gson gson = new Gson();
 
+    @Operation(
+            summary = "Lấy danh sách sản phẩm",
+            description = "Trả về toàn bộ danh sách sản phẩm từ database",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Thành công"),
+                    @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            }
+    )
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //lấy phần sau /dashboard/

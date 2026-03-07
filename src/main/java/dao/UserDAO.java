@@ -1,8 +1,14 @@
 package dao;
 
+import exception.InternalServerErrorException;
+import exception.InvalidUserIdException;
+import exception.QueryFailedException;
+import exception.UserNotFoundException;
 import model.User;
 import model.Role;
 import model.UserProfile;
+
+import javax.management.Query;
 
 public class UserDAO extends BaseDao {
 
@@ -10,10 +16,10 @@ public class UserDAO extends BaseDao {
     public boolean updatePassword(int userId, String newPasswordHash) {
         String sql = "UPDATE users SET password_hashed = :password WHERE id = :userId";
         int updated = get().withHandle(handle ->
-            handle.createUpdate(sql)
-                .bind("userId", userId)
-                .bind("password", newPasswordHash)
-                .execute()
+                handle.createUpdate(sql)
+                        .bind("userId", userId)
+                        .bind("password", newPasswordHash)
+                        .execute()
         );
         return updated > 0;
     }
@@ -22,10 +28,10 @@ public class UserDAO extends BaseDao {
     public boolean updateAvatar(int userId, String avtUrl) {
         String sql = "UPDATE users SET avt_url = :avtUrl WHERE id = :userId";
         int updated = get().withHandle(handle ->
-            handle.createUpdate(sql)
-                .bind("userId", userId)
-                .bind("avtUrl", avtUrl)
-                .execute()
+                handle.createUpdate(sql)
+                        .bind("userId", userId)
+                        .bind("avtUrl", avtUrl)
+                        .execute()
         );
         return updated > 0;
     }
@@ -34,10 +40,10 @@ public class UserDAO extends BaseDao {
     public boolean updateEmail(int userId, String email) {
         String sql = "UPDATE users SET email = :email WHERE id = :userId";
         int updated = get().withHandle(handle ->
-            handle.createUpdate(sql)
-                .bind("userId", userId)
-                .bind("email", email)
-                .execute()
+                handle.createUpdate(sql)
+                        .bind("userId", userId)
+                        .bind("email", email)
+                        .execute()
         );
         return updated > 0;
     }
@@ -46,24 +52,28 @@ public class UserDAO extends BaseDao {
     public User getUserById(int userId) {
         String sql = "SELECT * FROM users WHERE id = :userId";
         return get().withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("userId", userId)
-                        .map((rs, ctx) -> new User(
-                                rs.getInt("id"),
-                                rs.getString("name"),
-                                rs.getString("email"),
-                                Role.valueOf(rs.getString("role").toUpperCase()),
-                                rs.getString("password_hashed"),
-                                rs.getString("phone_number"),
-                                rs.getString("avt_url"),
-                                rs.getString("salt"),
-                                rs.getInt("verified")
-                        ))
-                        .findOne()
-                        .orElse(null)
+                        handle.createQuery(sql)
+                                .bind("userId", userId)
+                                .map((rs, ctx) -> User
+                                        .builder()
+                                        .id(rs.getInt("id"))
+                                        .name(rs.getString("name"))
+//                                con lai thi bo sung vao
+                                        .build())
+                                .findOne()
+                                .orElseThrow(() -> new UserNotFoundException("Exception: User not found"))
         );
     }
 
+    //                                rs.getInt("id"),
+//                                rs.getString("name"),
+//                                rs.getString("email"),
+//                                Role.valueOf(rs.getString("role").toUpperCase()),
+//                                rs.getString("password_hashed"),
+//                                rs.getString("phone_number"),
+//                                rs.getString("avt_url"),
+//                                rs.getString("salt"),
+//                                rs.getInt("verified")
     // Cập nhật tên
     public boolean updateName(int userId, String newName) {
         String sql = "UPDATE users SET name = :name WHERE id = :userId";
@@ -100,15 +110,15 @@ public class UserDAO extends BaseDao {
             );
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            throw new InternalServerErrorException("Loi server");
         }
     }
 
     // Xóa user (trả false nếu lỗi hoặc không tồn tại, true nếu xóa thành công)
+    // Exception: throw new Exeption()
     public boolean deleteUser(int userId) {
         if (userId <= 0) {
-            return false;
+            throw new InvalidUserIdException("Exception: Invalid user id");
         }
 
         try {
@@ -119,8 +129,7 @@ public class UserDAO extends BaseDao {
             );
             return deleted > 0;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            throw new QueryFailedException("Exception: Fail to delete");
         }
     }
 
