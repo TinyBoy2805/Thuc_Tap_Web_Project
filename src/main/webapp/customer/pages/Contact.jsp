@@ -172,7 +172,7 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     <script type="module" src="${pageContext.request.contextPath}/customer/scripts/main.js"></script>
     <script type="module">
-        import {initCKEditor} from "${pageContext.request.contextPath}/customer/scripts/utils/initCkeditor.js";
+        import {initCKEditor} from "${pageContext.request.contextPath}/user/scripts/utils/initCkeditor.js";
         window.addEventListener("DOMContentLoaded", () =>
         {
             initCKEditor("#message-textarea");

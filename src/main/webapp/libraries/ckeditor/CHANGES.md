@@ -645,7 +645,7 @@ Fixed Issues:
 * [#1479](https://github.com/ckeditor/ckeditor4/issues/1479): Fixed: [Justification](https://ckeditor.com/cke4/addon/justify) for styled content in BR mode is disabled.
 * [#2816](https://github.com/ckeditor/ckeditor4/issues/2816): Fixed: [Enhanced Image](https://ckeditor.com/cke4/addon/image2) resize handler is visible in [read-only mode](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_readonly.html).
 * [#2874](https://github.com/ckeditor/ckeditor4/issues/2874): Fixed: [Enhanced Image](https://ckeditor.com/cke4/addon/image2) resize handler is not created when the editor is initialized in [read-only mode](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_readonly.html).
-* [#2775](https://github.com/ckeditor/ckeditor4/issues/2775): Fixed: [Clipboard](https://ckeditor.com/cke4/addon/clipboard) paste buttons have wrong state when [read-only](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_readonly.html) mode is set by the mouse event listener with the [Div Editing Area](https://ckeditor.com/cke4/addon/divarea) plugin.
+* [#2775](https://github.com/ckeditor/ckeditor4/issues/2775): Fixed: [Clipboard](https://ckeditor.com/cke4/addon/clipboard) paste buttons have wrong state when [read-only](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_readonly.html) mode is set by the mouse event admin.listener with the [Div Editing Area](https://ckeditor.com/cke4/addon/divarea) plugin.
 * [#1901](https://github.com/ckeditor/ckeditor4/issues/1901): Fixed: Cannot open the context menu over a [Widget](https://ckeditor.com/cke4/addon/widget) with the <kbd>Shift</kbd>+<kbd>F10</kbd> keyboard shortcut.
 
 Other Changes:
@@ -661,7 +661,7 @@ Other Changes:
 	* Fixed: After removing a dictionary, the words are not underlined and considered as incorrect.
 	* Fixed: The Slovenian (`sl_SL`) language does not work.
 	* Fixed: Quotes with code `U+2019` (Right single quotation mark) are considered separators.
-	* Fixed: Wrong error message formatting when the service ID is invalid.
+	* Fixed: Wrong error message formatting when the user.service ID is invalid.
 	* Fixed: Absent languages in the Languages tab when using SCAYT with the [Shared Spaces](https://ckeditor.com/cke4/addon/sharedspace) plugin.
 
 ## CKEditor 4.11.3
@@ -960,7 +960,7 @@ Fixed Issues:
 * [#1008](https://github.com/ckeditor/ckeditor4/issues/1008): Fixed: Shorthand Hex colors from the [`config.colorButton_colors`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-colorButton_colors) option are not correctly highlighted in the [Color Button](https://ckeditor.com/cke4/addon/colorbutton) Text Color or Background Color panel.
 * [#1094](https://github.com/ckeditor/ckeditor4/issues/1094): Fixed: Widget definition [`upcast`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_plugins_widget_definition.html#property-upcasts) methods are called for every element.
 * [#1057](https://github.com/ckeditor/ckeditor4/issues/1057): Fixed: The [Notification](https://ckeditor.com/addon/notification) plugin overwrites Web Notifications API due to leakage to the global scope.
-* [#1068](https://github.com/ckeditor/ckeditor4/issues/1068): Fixed: Upload widget paste listener ignores changes to the [`uploadWidgetDefinition`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.fileTools.uploadWidgetDefinition.html).
+* [#1068](https://github.com/ckeditor/ckeditor4/issues/1068): Fixed: Upload widget paste admin.listener ignores changes to the [`uploadWidgetDefinition`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.fileTools.uploadWidgetDefinition.html).
 * [#921](https://github.com/ckeditor/ckeditor4/issues/921): Fixed: [Edge] CKEditor erroneously perceives internal copy and paste as type "external".
 * [#1213](https://github.com/ckeditor/ckeditor4/issues/1213): Fixed: Multiple images uploaded using [Upload Image](https://ckeditor.com/cke4/addon/uploadimage) plugin are randomly duplicated or mangled.
 * [#532](https://github.com/ckeditor/ckeditor4/issues/532): Fixed: Removed an outdated user guide link from the [About](https://ckeditor.com/cke4/addon/about) dialog.
@@ -1515,7 +1515,7 @@ New Features:
     * The [Data Transfer](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.plugins.clipboard.dataTransfer.html) facade was introduced to unify access to data in various types and files. [Data Transfer](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.plugins.clipboard.dataTransfer.html) is now always available in the [`editor#paste`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#event-paste) event.
     * Switched from the pastebin to using the native clipboard access whenever possible. This solved many issues related to pastebin such as unnecessary scrolling or data loss. Additionally, on copy and cut from the editor the clipboard data is set. Therefore, on paste the editor has access to clean data, undisturbed by the browsers.
     * Drag and drop of inline and block widgets was integrated with the standard clipboard APIs. By listening to drag events you will thus be notified about widgets, too. This opens a possibility to filter pasted and dropped widgets.
-    * The [`editor#paste`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#event-paste) event can have the `range` parameter so it is possible to change the paste position in the listener or paste in the not selectable position. Also the [`editor.insertHtml()`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#method-insertHtml) method now accepts `range` as an additional parameter.
+    * The [`editor#paste`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#event-paste) event can have the `range` parameter so it is possible to change the paste position in the admin.listener or paste in the not selectable position. Also the [`editor.insertHtml()`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#method-insertHtml) method now accepts `range` as an additional parameter.
     * [#11621](https://dev.ckeditor.com/ticket/11621): A configurable [paste filter](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-pasteFilter) was introduced. The filter is by default turned to `'semantic-content'` on Webkit and Blink for all pasted content coming from external sources because of the low quality of HTML that these engines put into the clipboard. Internal and cross-editor paste is safe due to the change explained in the previous point.
 
   * Other changes and related fixes:
@@ -1796,7 +1796,7 @@ New Features:
 Fixed Issues:
 
 * [#11861](https://dev.ckeditor.com/ticket/11861): [WebKit/Blink] Fixed: Span elements created while joining adjacent elements. **Note:** This patch only covers cases when *Backspace* or *Delete* is pressed on a collapsed (empty) selection. The remaining case, with a non-empty selection, will be fixed in the next release.
-* [#10714](https://dev.ckeditor.com/ticket/10714): [iOS] Fixed: Selection and drop-downs are broken if a touch event listener is used due to a [WebKit bug](https://bugs.webkit.org/show_bug.cgi?id=128924). Thanks to [Arty Gus](https://github.com/artygus)!
+* [#10714](https://dev.ckeditor.com/ticket/10714): [iOS] Fixed: Selection and drop-downs are broken if a touch event admin.listener is used due to a [WebKit bug](https://bugs.webkit.org/show_bug.cgi?id=128924). Thanks to [Arty Gus](https://github.com/artygus)!
 * [#11911](https://dev.ckeditor.com/ticket/11911): Fixed setting the `dir` attribute for a preloaded language in [CKEDITOR.lang](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.lang.html). Thanks to [Akash Mohapatra](https://github.com/akashmohapatra)!
 * [#11926](https://dev.ckeditor.com/ticket/11926): Fixed: [Code Snippet](https://ckeditor.com/cke4/addon/codesnippet) does not decode HTML entities when loading code from the `<code>` element.
 * [#11223](https://dev.ckeditor.com/ticket/11223): Fixed: Issue when [Protected Source](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-protectedSource) was not working in the `<title>` element.

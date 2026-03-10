@@ -69,7 +69,7 @@ Trademarks
 ----------
 
 CKEditor is a trademark of CKSource Holding sp. z o.o. All other brand
-and product names are trademarks, registered trademarks or service
+and product names are trademarks, registered trademarks or user.service
 marks of their respective holders.
 
 ---
@@ -101,7 +101,7 @@ your programs, too.
   When we speak of free software, we are referring to freedom, not
 price.  Our General Public Licenses are designed to make sure that you
 have the freedom to distribute copies of free software (and charge for
-this service if you wish), that you receive source code or can get it
+this user.service if you wish), that you receive source code or can get it
 if you want it, that you can change the software or use pieces of it
 in new free programs; and that you know you can do these things.
 
@@ -393,7 +393,7 @@ strategy to use in any particular case, based on the explanations below.
   When we speak of free software, we are referring to freedom of use,
 not price.  Our General Public Licenses are designed to make sure that
 you have the freedom to distribute copies of free software (and charge
-for this service if you wish); that you receive source code or can get
+for this user.service if you wish); that you receive source code or can get
 it if you want it; that you can change the software and use pieces of
 it in new free programs; and that you are informed that you can do
 these things.
@@ -638,7 +638,7 @@ whether or not they are linked directly with the Library itself.
 link a "work that uses the Library" with the Library to produce a
 work containing portions of the Library, and distribute that work
 under terms of your choice, provided that the terms permit
-modification of the work for the customer's own use and reverse
+modification of the work for the user's own use and reverse
 engineering for debugging such modifications.
 
   You must give prominent notice with each copy of the work that the

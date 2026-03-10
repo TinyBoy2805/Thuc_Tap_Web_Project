@@ -57,7 +57,7 @@
                       <p><i class="fa-solid fa-envelope"></i> ${customer.email}</p>
                       <p><i class="fa-solid fa-phone"></i> ${customer.phone_number}</p>
                       <button class="detail-btn" type="button"
-                              onclick="window.location.href='${pageContext.request.contextPath}/admin/manage_customer?id=${customer.id}'">
+                              onclick="window.location.href='${pageContext.request.contextPath}/admin/manage_customer?id=${user.id}'">
                         Chi tiết
                       </button>
                     </div>

@@ -59,7 +59,7 @@
                         </div>
                     </div>
                 </c:forEach>
-                <!-- Second card about customer who buy this order -->
+                <!-- Second card about user who buy this order -->
                 <div class="customer">
                     <p class="customer__name">${customer.name}</p>
                     <div class="customer__info">

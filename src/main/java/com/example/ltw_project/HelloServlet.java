@@ -13,7 +13,9 @@ public class HelloServlet extends HttpServlet {
         message = "Hello World!";
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
 
         // Hello
@@ -24,5 +26,6 @@ public class HelloServlet extends HttpServlet {
     }
 
     public void destroy() {
+
     }
 }
