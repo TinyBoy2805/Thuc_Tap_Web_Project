@@ -227,7 +227,7 @@
     <script type="module" src="${pageContext.request.contextPath}/customer/scripts/product/addToCart.js" defer></script>
     <script type="module" src="${pageContext.request.contextPath}/customer/scripts/voucherPage/useVoucher.js" defer></script>
     <script type="module">
-        import {initCKEditor} from "${pageContext.request.contextPath}/customer/scripts/utils/initCkeditor.js";
+        import {initCKEditor} from "${pageContext.request.contextPath}/user/scripts/utils/initCkeditor.js";
         window.addEventListener("DOMContentLoaded", () => {
             initCKEditor("#review-textarea");
         });

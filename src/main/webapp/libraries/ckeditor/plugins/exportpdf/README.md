@@ -1,6 +1,6 @@
 # CKEditor 4 Export to PDF Plugin
 
-The **Export to PDF** CKEditor 4 plugin allows you to easily print the WYSIWYG editor content to a PDF file. When enabled, this feature sends the content of your editor together with the styles that are used to display it to the CKEditor Cloud Services HTML to PDF converter service. The service then generates a PDF document that can be downloaded by the user.
+The **Export to PDF** CKEditor 4 plugin allows you to easily print the WYSIWYG editor content to a PDF file. When enabled, this feature sends the content of your editor together with the styles that are used to display it to the CKEditor Cloud Services HTML to PDF converter user.service. The user.service then generates a PDF document that can be downloaded by the user.
 
 Thanks to this plugin, it takes exactly one button click to get a PDF file with content formatted in the same way as the one visible in CKEditor 4.
 
@@ -65,7 +65,7 @@ CKEDITOR.replace( 'editor', {
 } );
 ```
 
-This value is unique for each customer and can be found in the [CKEditor Ecosystem dashboard](https://dashboard.ckeditor.com).
+This value is unique for each user and can be found in the [CKEditor Ecosystem dashboard](https://dashboard.ckeditor.com).
 
 This is all. If you are having trouble in setting up Export to PDF plugin, please [contact us](https://ckeditor.com/contact/).
 
@@ -99,4 +99,4 @@ For more details about available licensing options please contact us at sales@ck
 
 ### Trademarks
 
-**CKEditor** is a trademark of [CKSource](http://cksource.com) Holding sp. z o.o. All other brand and product names are trademarks, registered trademarks or service marks of their respective holders.
+**CKEditor** is a trademark of [CKSource](http://cksource.com) Holding sp. z o.o. All other brand and product names are trademarks, registered trademarks or user.service marks of their respective holders.

@@ -34,7 +34,7 @@
       </a>
     </li>
     <li class="list__item">
-      <a href="${pageContext.request.contextPath}/admin/customer" class="${fn:contains(uri, '/admin/customer') || fn:contains(uri, '/admin/manage_customer') || fn:contains(uri, '/admin/pages/KhachHang.jsp') || fn:contains(uri, '/admin/pages/Quanlykhachhang.jsp')  ? 'active' : ''}">
+      <a href="${pageContext.request.contextPath}/admin/customer" class="${fn:contains(uri, '/admin/user') || fn:contains(uri, '/admin/manage_customer') || fn:contains(uri, '/admin/pages/KhachHang.jsp') || fn:contains(uri, '/admin/pages/Quanlykhachhang.jsp')  ? 'active' : ''}">
         <div class="section">
           <div class="icon"><i class="fa-solid fa-users"></i></div>
           <p class="title">Khách hàng</p>

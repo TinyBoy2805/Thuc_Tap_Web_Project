@@ -1,10 +1,11 @@
-<%@ page import="model.cart.Cart" %>
-<%@ page import="model.cart.CartItem" %>
+<%@ page import="user.model.cart.Cart" %>
+<%@ page import="user.model.cart.CartItem" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ page import="java.text.DecimalFormat, java.text.DecimalFormatSymbols" %>
-<%@ page import="model.User" %>
+<%@ page import="admin.model.User" %>
+<%@ page import="admin.service.OrderService" %>
 <%
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
     symbols.setGroupingSeparator('.');
@@ -168,8 +169,8 @@
 
                                     <div class="quick-stats">
                                         <%
-                                            service.OrderService headerOrderService = new service.OrderService();
-                                            service.VoucherService headerVoucherService = new service.VoucherService();
+                                            OrderService headerOrderService = new OrderService();
+                                            user.service.VoucherService headerVoucherService = new user.service.VoucherService();
                                             int orderCount = headerOrderService.getOrdersByUser(user.getId()).size();
                                             int voucherCount = headerVoucherService.getUserVouchers(user.getId()).size();
                                         %>

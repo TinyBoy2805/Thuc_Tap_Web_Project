@@ -5,8 +5,8 @@
 
 
 <%@ page import="java.text.DecimalFormat, java.text.DecimalFormatSymbols" %>
-<%@ page import="model.cart.CartItem" %>
-<%@ page import="model.cart.Cart" %>
+<%@ page import="user.model.cart.CartItem" %>
+<%@ page import="user.model.cart.Cart" %>
 <%@ page import="java.util.Map" %>
 <%
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -24,7 +24,7 @@
 
     if (!isLoggedIn)
     {
-        response.sendRedirect(request.getContextPath() + "/customer/pages/NotFoundPage.jsp");
+        response.sendRedirect(request.getContextPath() + "/user/pages/NotFoundPage.jsp");
         return;
     }
 //    String username = isLoggedIn ? (String) session.getAttribute("username") : "";

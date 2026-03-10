@@ -99,7 +99,7 @@ models (“License Models”) of Your choice:
 A valid Developer license is required for every single Developer Person. Developer licenses cannot be shared among
 different Developer Persons. Non-Development Activities on Production Websites do not require Developer licenses.
 
-License Fee values may differ depending on the license model.
+License Fee values may differ depending on the license user.model.
 
 6. Agreement Acceptance
 
@@ -138,7 +138,7 @@ the following (each a “Support Request”):
   • c) and documentation clarification.
 
 The number of Support Requests that CKSource is entitled to accept from You is limited to 2 per month, if You have
-chosen the Basic license model, or 5 per month, if You have chosen the Professional license model. CKSource may refuse
+chosen the Basic license user.model, or 5 per month, if You have chosen the Professional license user.model. CKSource may refuse
 Support Requests that exceed these limits.
 
 CKSource is not in any way obliged to perform bug fixing or custom development activities as a result of a Support

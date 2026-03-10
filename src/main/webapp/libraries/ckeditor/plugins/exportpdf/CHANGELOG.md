@@ -61,7 +61,7 @@ Other Changes:
 
 The first beta release of the CKEditor 4 Export to PDF plugin.
 
-This plugin allows you to easily print your WYSIWYG editor content to a PDF file. When enabled, this feature sends the content of your editor together with the styles that are used to display it to the CKEditor Cloud Services HTML to PDF converter service. The service then generates a PDF document that can be downloaded by the user.
+This plugin allows you to easily print your WYSIWYG editor content to a PDF file. When enabled, this feature sends the content of your editor together with the styles that are used to display it to the CKEditor Cloud Services HTML to PDF converter user.service. The user.service then generates a PDF document that can be downloaded by the user.
 
 Available features:
 

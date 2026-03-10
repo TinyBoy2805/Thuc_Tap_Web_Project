@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () =>
         }
     });
 
-    // gán listener chung cho tbody
+    // gán admin.listener chung cho tbody
     document.querySelector('.cart__table-body').addEventListener('click', async (e) =>
     {
         const delBtn = e.target.closest('.cart__remove-btn');

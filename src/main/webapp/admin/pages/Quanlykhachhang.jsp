@@ -167,7 +167,7 @@
                     </c:if>
                     <div style="display:inline-flex;gap:12px;align-items:center;">
                       <button class="btn ghost" type="button"
-                        onclick="window.location.href='${pageContext.request.contextPath}/admin/manage_customer?id=${customer.id}'">Hủy</button>
+                        onclick="window.location.href='${pageContext.request.contextPath}/admin/manage_customer?id=${user.id}'">Hủy</button>
 
 
                       <form id="updateForm" action="${pageContext.request.contextPath}/admin/manage_customer"

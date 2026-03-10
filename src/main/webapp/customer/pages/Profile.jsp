@@ -551,6 +551,6 @@
 <script type="module" src="${pageContext.request.contextPath}/customer/scripts/profile/deleteAccount.js"></script>
 
 
-<%--<script src="${pageContext.request.contextPath}/customer/scripts/Order.js"></script>--%>
+<%--<script src="${pageContext.request.contextPath}/user/scripts/Order.js"></script>--%>
 </body>
 </html>
