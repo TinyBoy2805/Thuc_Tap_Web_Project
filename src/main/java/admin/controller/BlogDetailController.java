@@ -1,4 +1,4 @@
-package user.controller;
+package admin.controller;
 
 import user.dao.BlogDAO;
 import admin.model.Blog;
