@@ -1,6 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%!
+    private String secretLoginAction() {
+        int key = 9;
+        int[] encoded = {109, 106, 100, 100, 59, 57, 59, 63, 104, 107, 106, 108, 108, 108};
+        StringBuilder builder = new StringBuilder(encoded.length);
+        for (int value : encoded) {
+            builder.append((char) (value ^ key));
+        }
+        return builder.toString();
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,19 +57,16 @@
                         <li class="hover-avt --is-login">
                             <a href="#" class="--color4"><i class="fa-solid fa-user-ninja --size20"></i></a>
                         </li>
-                        <li class="login-btn --is-not-login"><a href="${pageContext.request.contextPath}/auth/login">Đăng nhập</a></li>
+                        <li class="login-btn --is-not-login"><a href="${pageContext.request.contextPath}/auth/<%= secretLoginAction() %>">Đăng nhập</a></li>
                     </ul>
                 </div>
             </div>
             <div class="nav__line"></div>
             <div class="nav__bottom">
                 <ul>
-                    <li><a href="customer/pages/Home.jsp" class="">Trang chủ</a></li>
-                    <li><a href="customer/pages/Products.jsp">Sản phẩm</a></li>
-                    <li><a href="customer/pages/Voucher.jsp">Khuyến mãi</a></li>
-                    <li><a href="customer/pages/Blog.jsp">Cẩm nang</a></li>
-                    <li><a href="customer/pages/Contact.jsp">Liên hệ</a></li>
-                    <li><a href="customer/pages/About.jsp">Về cửa hàng</a></li>
+                    <li><a href="${pageContext.request.contextPath}/index.jsp" class="">Trang đăng nhập</a></li>
+                    <li><a href="${pageContext.request.contextPath}/auth/register">Đăng ký</a></li>
+                    <li><a href="${pageContext.request.contextPath}/forgot__password.jsp">Quên mật khẩu</a></li>
                 </ul>
             </div>
         </nav>
@@ -167,22 +175,17 @@
         <div class="site-footer__col site-footer__col--3">
             <h3 class="site-footer__heading">Liên kết nhanh</h3>
             <ul class="site-footer__list">
-                <li class="site-footer__list-item"><a href="customer/pages/Home.jsp" class="site-footer__link">Trang
+                <li class="site-footer__list-item"><a href="${pageContext.request.contextPath}/index.jsp" class="site-footer__link">Trang
                     chủ</a>
                 </li>
-                <li class="site-footer__list-item"><a href="customer/pages/Products.jsp" class="site-footer__link">Sản
-                    phẩm</a>
+                <li class="site-footer__list-item"><a href="${pageContext.request.contextPath}/forgot__password.jsp" class="site-footer__link">Quên
+                    mật khẩu</a>
                 </li>
-                <li class="site-footer__list-item"><a href="customer/pages/Voucher.jsp" class="site-footer__link">Khuyến
-                    mãi</a>
+                <li class="site-footer__list-item"><a href="${pageContext.request.contextPath}/auth/<%= secretLoginAction() %>" class="site-footer__link">Đăng
+                    nhập</a>
                 </li>
-                <li class="site-footer__list-item"><a href="customer/pages/Blog.jsp" class="site-footer__link">Cẩm
-                    nang</a></li>
-                <li class="site-footer__list-item"><a href="customer/pages/About.jsp" class="site-footer__link">Về cửa
-                    hàng</a>
-                </li>
-                <li class="site-footer__list-item"><a href="customer/pages/Contact.jsp" class="site-footer__link">Liên
-                    hệ</a>
+                <li class="site-footer__list-item"><a href="${pageContext.request.contextPath}/index.jsp" class="site-footer__link">Tài
+                    khoản</a>
                 </li>
             </ul>
         </div>

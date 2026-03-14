@@ -3,8 +3,8 @@ package admin.service;
 import admin.dao.AuthDao;
 import admin.Enums.PasswordStrength;
 import admin.Enums.RegisterError;
+import admin.model.ValidateObject;
 import admin.model.User;
-import user.model.ValidateObject;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.math.BigInteger;

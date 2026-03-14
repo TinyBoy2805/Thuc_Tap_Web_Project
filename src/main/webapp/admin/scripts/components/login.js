@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.getElementById('loginButton');
 
     const ADMIN_URL = './admin/pages/dashboard.html';
-    const CUSTOMER_URL = './customer/pages/Home.html';
+    const CUSTOMER_URL = '../../index.jsp';
 
     const updateLoginState = () => {
         const isChecked = adminCheckbox.checked;
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 //
 //         } else {
 //
-//             window.location.href = '../../../customer/pages/Home.jsp';
+//             window.location.href = '../../../index.jsp';
 //
 //         }
 //     });

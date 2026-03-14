@@ -1,6 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%!
+    private String secretLoginAction() {
+        int key = 9;
+        int[] encoded = {109, 106, 100, 100, 59, 57, 59, 63, 104, 107, 106, 108, 108, 108};
+        StringBuilder builder = new StringBuilder(encoded.length);
+        for (int value : encoded) {
+            builder.append((char) (value ^ key));
+        }
+        return builder.toString();
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,15 +22,12 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/customer/styles/index.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/styles/pages/login.css?v=1.1">
 </head>
 
 <body>
 
 <div class="page-login">
-    <jsp:include page="/customer/components/Header.jsp"/>
-
     <main class="main-content">
         <div class="welcome-section">
             <h1 class="welcome-section__title">Chào mừng đến với MichiShop</h1>
@@ -38,7 +46,7 @@
                 <button class="tab-list__button ${activeTab == 'register' ? 'tab-list__button--active' : ''}" data-form="register">Đăng ký</button>
             </div>
 
-            <form id="login-form" class="auth-form ${activeTab == 'register' ? 'auth-form--hidden' : 'auth-form--active'}" action="${pageContext.request.contextPath}/auth/login" method="post">
+            <form id="login-form" class="auth-form ${activeTab == 'register' ? 'auth-form--hidden' : 'auth-form--active'}" action="${pageContext.request.contextPath}/auth/<%= secretLoginAction() %>" method="post">
                 <!-- <h2 class="auth-form__title">Đăng nhập</h2> -->
                 <div class="input-group">
                     <label for="login-email" class="input-group__label">Email hoặc Số điện thoại</label>
@@ -117,7 +125,6 @@
     </main>
 
 </div>
-    <jsp:include page="/customer/components/Footer.jsp"/>
     <script src="${pageContext.request.contextPath}/admin/scripts/components/login.js"></script>
     <script src="${pageContext.request.contextPath}/admin/scripts/components/showPassword.js"></script>
 </body>

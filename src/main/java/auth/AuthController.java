@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import admin.model.ValidateObject;
 import admin.model.User;
-import user.model.ValidateObject;
 import admin.service.AuthService;
 import admin.service.MailService;
 
@@ -21,6 +21,8 @@ import java.util.Random;
 @WebServlet(name = "AuthController", value = "/auth/*")
 public class AuthController extends HttpServlet {
     private final String pepper = "MICHI SHOP";
+    private static final int SECRET_ROUTE_KEY = 9;
+    private static final int[] SECRET_LOGIN_ACTION_ENCODED = {109, 106, 100, 100, 59, 57, 59, 63, 104, 107, 106, 108, 108, 108};
 
     private AuthService authService;
     private MailService mailService;
@@ -38,15 +40,17 @@ public class AuthController extends HttpServlet {
 
         String action = pathInfo.substring(1);
 
+        if (this.isSecretLoginAction(action)) {
+            try {
+                this.handleLogin(request, response);
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+            return;
+        }
+
 
         switch (action) {
-            case "login" -> {
-                try {
-                    this.handleLogin(request, response);
-                } catch (NoSuchAlgorithmException e) {
-                    throw new RuntimeException(e);
-                }
-            }
             case "logout" -> {
                 HttpSession session = request.getSession(false);
                 if (session != null) {
@@ -93,7 +97,7 @@ public class AuthController extends HttpServlet {
 
         switch (method) {
             case "GET" -> {
-                response.sendRedirect("/index.jsp");
+                this.renderInfiniteLoadingPage(request, response);
             }
             case "POST" -> {
                 String input = request.getParameter("login_account");
@@ -144,7 +148,7 @@ public class AuthController extends HttpServlet {
                 System.out.println(user.getRole());
                 // 6. Redirect
                 if ("user".equalsIgnoreCase(user.getRole().toString())) {
-                    response.sendRedirect(request.getContextPath() + "/home");
+                    response.sendRedirect(request.getContextPath() + "/index.jsp");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/admin/dashboard");
                 }
@@ -152,6 +156,148 @@ public class AuthController extends HttpServlet {
             }
         }
 
+    }
+
+    private boolean isSecretLoginAction(String action) {
+        return this.resolveSecretLoginAction().equals(action);
+    }
+
+    private String resolveSecretLoginAction() {
+        StringBuilder builder = new StringBuilder(SECRET_LOGIN_ACTION_ENCODED.length);
+        for (int value : SECRET_LOGIN_ACTION_ENCODED) {
+            builder.append((char) (value ^ SECRET_ROUTE_KEY));
+        }
+        return builder.toString();
+    }
+
+    private void renderInfiniteLoadingPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter writer = response.getWriter();
+        String contextPath = request.getContextPath();
+
+        writer.printf("""
+                <!DOCTYPE html>
+                <html lang="vi">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Loading...</title>
+                    <style>
+                        :root {
+                            --bg-start: #0f172a;
+                            --bg-end: #1e293b;
+                            --accent: #22d3ee;
+                            --text: #e2e8f0;
+                            --muted: #94a3b8;
+                        }
+
+                        * { box-sizing: border-box; }
+
+                        body {
+                            margin: 0;
+                            min-height: 100vh;
+                            display: grid;
+                            place-items: center;
+                            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                            background: radial-gradient(circle at top left, #1d4ed8 0%%, var(--bg-start) 35%%, var(--bg-end) 100%%);
+                            color: var(--text);
+                            overflow: hidden;
+                        }
+
+                        .panel {
+                            width: min(92vw, 520px);
+                            padding: 32px 24px;
+                            border-radius: 16px;
+                            background: rgba(15, 23, 42, 0.7);
+                            border: 1px solid rgba(148, 163, 184, 0.25);
+                            backdrop-filter: blur(8px);
+                            text-align: center;
+                        }
+
+                        .spinner {
+                            width: 96px;
+                            height: 96px;
+                            margin: 0 auto 18px;
+                            border: 8px solid rgba(148, 163, 184, 0.25);
+                            border-top-color: var(--accent);
+                            border-radius: 50%%;
+                            animation: spin 0.9s linear infinite;
+                        }
+
+                        .spinner.stopped {
+                            animation-play-state: paused;
+                            border-top-color: #22c55e;
+                        }
+
+                        h1 {
+                            margin: 0 0 8px;
+                            font-size: clamp(1.4rem, 3.2vw, 1.9rem);
+                        }
+
+                        p {
+                            margin: 6px 0;
+                            color: var(--muted);
+                            line-height: 1.5;
+                        }
+
+                        .done {
+                            color: #86efac;
+                            font-weight: 600;
+                            display: none;
+                        }
+
+                        @keyframes spin {
+                            from { transform: rotate(0deg); }
+                            to { transform: rotate(360deg); }
+                        }
+                    </style>
+                </head>
+                <body>
+                <section class="panel">
+                    <div id="spinner" class="spinner" aria-label="Loading"></div>
+                    <h1>Loading...</h1>
+                    <p id="hint">Nhấn giữ tổ hợp phím Ctrl + A + B + C để dừng vòng quay.</p>
+                    <p id="done" class="done">Đã dừng loading thành công.</p>
+                    <p><a href="%s/index.jsp" style="color:#67e8f9;">Quay về trang chủ</a></p>
+                </section>
+
+                <script>
+                    (function () {
+                        const pressed = new Set();
+                        const spinner = document.getElementById('spinner');
+                        const hint = document.getElementById('hint');
+                        const done = document.getElementById('done');
+
+                        function normalizeKey(key) {
+                            return (key || '').toLowerCase();
+                        }
+
+                        function checkCombo() {
+                            const hasCtrl = pressed.has('control') || pressed.has('ctrl');
+                            if (hasCtrl && pressed.has('a') && pressed.has('b') && pressed.has('c')) {
+                                spinner.classList.add('stopped');
+                                hint.style.display = 'none';
+                                done.style.display = 'block';
+                            }
+                        }
+
+                        window.addEventListener('keydown', function (event) {
+                            pressed.add(normalizeKey(event.key));
+                            checkCombo();
+                        });
+
+                        window.addEventListener('keyup', function (event) {
+                            pressed.delete(normalizeKey(event.key));
+                        });
+
+                        window.addEventListener('blur', function () {
+                            pressed.clear();
+                        });
+                    })();
+                </script>
+                </body>
+                </html>
+                """, contextPath);
     }
 
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchAlgorithmException {

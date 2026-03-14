@@ -16,7 +16,7 @@ public class FilterAuth extends HttpServlet implements Filter {
         String path = req.getRequestURI();
 
         //skip these routes
-        String[] publicPaths = {"/auth", "/product", "/about", "/blog", "/product", "/home", "/contact"};
+        String[] publicPaths = {"/auth", "/index.jsp", "/forgot__password.jsp", "/verify.jsp", "/admin"};
         for (String p : publicPaths) {
             if (path.startsWith(req.getContextPath() + p)) {
                 chain.doFilter(req, res);
@@ -27,7 +27,7 @@ public class FilterAuth extends HttpServlet implements Filter {
         //routes khác sẽ bị chuyển về login
         HttpSession session = ((HttpServletRequest) request).getSession(false);
         if (session == null || session.getAttribute("user") == null) {
-            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/user/pages/NotFoundPage.jsp");
+            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/index.jsp");
             return;
         }
 

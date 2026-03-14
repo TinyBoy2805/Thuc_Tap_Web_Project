@@ -8,13 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quên mật khẩu - MiChiShop</title>
     <link rel="stylesheet" href="admin/styles/pages/forgot__password.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/customer/styles/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
           crossorigin="anonymous">
 </head>
 
 <body>
-        <jsp:include page="/customer/components/Header.jsp"/>
     <div class="page-login">
         <main class="main-content">
             <div class="welcome-section">
@@ -44,7 +42,6 @@
             </div>
         </main>
     </div>
-        <jsp:include page="/customer/components/Footer.jsp"/>
 
         <script>
             const resetForm = document.getElementById("reset-step-1");

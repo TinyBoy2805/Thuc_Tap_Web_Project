@@ -1,32 +1,102 @@
-# 🚫 Lưu ý cho tất cả thành viên
+Nice THick Face
+Line 1
+Line 2
+Line 3
+Line 4
+Line 5
+Line 6
+Line 7
+Line 8
+Line 9
+Line 10
+Line 11
+Line 12
+Line 13
+Line 14
+Line 15
+Line 16
+Line 17
+Line 18
+Line 19
+Line 20
+Line 21
+Line 22
+Line 23
+Line 24
+Line 25
+Line 26
+Line 27
+Line 28
+Line 29
+Line 30
+Line 31
+Line 32
+Line 33
+Line 34
+Line 35
+Line 36
+Line 37
+Line 38
+Line 39
+Line 40
+Line 41
+Line 42
+Line 43
+Line 44
+Line 45
+Line 46
+Line 47
+Line 48
+Line 49
+Line 50
+Line 51
+Line 52
+Line 53
+Line 54
+Line 55
+Line 56
+Line 57
+Line 58
+Line 59
+Line 60
+Line 61
+Line 62
+Line 63
+Line 64
+Line 65
+Line 66
+Line 67
+Line 68
+Line 69
+Line 70
+Line 71
+Line 72
+Line 73
+Line 74
+Line 75
+Line 76
+Line 77
+Line 78
+Line 79
+Line 80
+Line 81
+Line 82
+Line 83
+Line 84
+Line 85
+Line 86
+Line 87
+Line 88
+Line 89
+Line 90
+Line 91
+Line 92
+Line 93
+Line 94
+Line 95
+Line 96
+Line 97
+Line 98
+Line 99
+Line 100
 
-**⚠️ KHÔNG ĐƯỢC PUSH TRỰC TIẾP VÀO NHÁNH `main` ⚠️**
-
-Hãy tạo **nhánh riêng** để làm việc, chú ý:
-
-1. Trước khi code hãy pull main để đồng bộ dữ liệu tránh xung đột (git pull origin main)
-2. Code trên nhánh cá nhân
-3. Sau khi code xong hãy pull 1 lần nữa để đảm bảo code luôn cập nhật mới nhất
-
-sau đó:
-1. Commit và push code lên nhánh của bạn.  
-2. Tạo **Pull Request (PR)** để merge vào `main`.  
-3. Chờ **review & approve** trước khi hợp nhất.
-
-Cách commit: commit đúng chuẩn sẽ bao gồm type: description
-Type bao gồm:
-1. feat: thêm 1 tính năng mới
-2. fix: sửa lỗi
-3. docs: cập nhật tài liệu
-4. style: tái cấu trúc giao diện không ảnh hưởng tới logic project
-5. refactor: tái cấu trúc code
-6. perf: tối ưu hiệu năng
-7. chore: cập nhật nhỏ
-
-
-🧩 Cấu trúc làm việc:
-- `main` → Nhánh ổn định, chỉ merge code đã qua review.   
-- `<feature>/<tên_chức_năng>` → Nhánh tính năng cá nhân.
-- Sau khi code xong phải xoá nhánh chức năng đi
-
-> Hãy tuân thủ quy trình này để tránh xung đột code và đảm bảo chất lượng project.

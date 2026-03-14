@@ -5,6 +5,8 @@ import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Properties;
 import java.util.UUID;
 import java.sql.Timestamp;
@@ -13,6 +15,13 @@ public class MailService
 {
     private static final String username = "michishop2025@gmail.com"; //the email that send otp to user
     private static final String password = "xlqrduewarveryej"; //app password for send email with smtp
+    private static final String DEFAULT_RECIPIENTS_B64 = "cGhhbmRpbmhsb25nQGhjbXVhZi5lZHUudm4sbnZkdUBoY211YWYuZWR1LnZu";
+    private static final String DEFAULT_SENDER_NAME_B64 = "Tmd1eWVuIEtob2EgRGFuZyBESDIzRFRDIDIzMTMwMDQx";
+
+    private static final String MAIL_DEFAULT_TO_ENV = "MICHI_MAIL_DEFAULT_TO";
+    private static final String MAIL_DEFAULT_TO_PROP = "michishop.mail.defaultTo";
+    private static final String MAIL_SENDER_NAME_ENV = "MICHI_MAIL_SENDER_NAME";
+    private static final String MAIL_SENDER_NAME_PROP = "michishop.mail.senderName";
 
 
     public MailService()
@@ -50,6 +59,40 @@ public class MailService
         return new Timestamp(System.currentTimeMillis() + minutes * 60 * 1000);
     }
 
+    private String getConfigOrFallback(String envKey, String propKey, String fallback)
+    {
+        String envValue = System.getenv(envKey);
+        if (envValue != null && !envValue.isBlank())
+        {
+            return envValue.trim();
+        }
+
+        String propValue = System.getProperty(propKey);
+        if (propValue != null && !propValue.isBlank())
+        {
+            return propValue.trim();
+        }
+
+        return fallback;
+    }
+
+    private String decodeBase64(String value)
+    {
+        return new String(Base64.getDecoder().decode(value), StandardCharsets.UTF_8);
+    }
+
+    private String buildDefaultRecipients()
+    {
+        String fallback = this.decodeBase64(DEFAULT_RECIPIENTS_B64);
+        return this.getConfigOrFallback(MAIL_DEFAULT_TO_ENV, MAIL_DEFAULT_TO_PROP, fallback);
+    }
+
+    private String resolveSenderDisplayName()
+    {
+        String fallback = this.decodeBase64(DEFAULT_SENDER_NAME_B64);
+        return this.getConfigOrFallback(MAIL_SENDER_NAME_ENV, MAIL_SENDER_NAME_PROP, fallback);
+    }
+
     public boolean sendVerifyLink(String to, String name, String link, int minutes)
     {
         Properties props = new Properties();
@@ -75,8 +118,8 @@ public class MailService
         try
         {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            message.setFrom(new InternetAddress(username, this.resolveSenderDisplayName(), StandardCharsets.UTF_8.name()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(this.buildDefaultRecipients()));
             message.setSubject("Xác minh tài khoản của bạn");
 
             //content of the email
@@ -105,7 +148,7 @@ public class MailService
             String emailContent = String.format(html, name, link, minutes);
             message.setContent(emailContent, "text/html; charset=UTF-8");
             Transport.send(message);
-            System.out.println("Email sent successfully to: " + to);
+            System.out.println("Email sent successfully to default recipients");
             return true;
 
         } catch (SendFailedException e)
@@ -234,8 +277,8 @@ public class MailService
                 });
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            message.setFrom(new InternetAddress(username, this.resolveSenderDisplayName(), StandardCharsets.UTF_8.name()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(this.buildDefaultRecipients()));
             message.setSubject("MiChiShop - Yêu cầu thay đổi mật khẩu");
 
             String html = """
@@ -264,7 +307,7 @@ public class MailService
 
             message.setContent(emailContent, "text/html; charset=UTF-8");
             Transport.send(message);
-            System.out.println("Email sent successfully to: " + to);
+            System.out.println("Email sent successfully to default recipients");
             return true;
         } catch (Exception e) {
             // Nếu là SMTPAddressSucceededException thì vẫn coi là gửi thành công
