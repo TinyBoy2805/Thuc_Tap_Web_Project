@@ -95,12 +95,18 @@ public class AdminBlogController extends HttpServlet {
                 .updatedAt(now)
                 .build();
 
+        // xứ lý khi lỗi blog
         try {
-            blogDao.insertBlog(blog);
-        } catch (InsertFailedException e) {
-            System.err.println(e.getMessage());
+            boolean success = blogDao.insertBlog(blog);
+            if(!success) {
+                throw new InsertFailedException("Thêm Blog thất bại");
+            }
+        }catch (InsertFailedException e) {
+            e.printStackTrace();
+            request.setAttribute("LỖI", e.getMessage());
+            request.getRequestDispatcher("/admin/blog").forward(request,response);
+            return;
         }
-        response.sendRedirect(request.getContextPath() + "/admin/blog");
     }
 
     @Override

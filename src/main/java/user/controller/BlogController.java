@@ -1,6 +1,6 @@
 package user.controller;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -16,13 +16,13 @@ public class BlogController extends HttpServlet
 
     private BlogService blogService;
     private final int PAGE_SIZE = 6;
-    private Gson gson;
+    private ObjectMapper mapper;
     
     @Override
     public void init() throws ServletException
     {
         this.blogService = new BlogService();
-        this.gson = new Gson();
+        this.mapper = new ObjectMapper();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class BlogController extends HttpServlet
             String pageParam = request.getParameter("page");
             if(pageParam != null && !pageParam.equals("1"))
             {
-                this.getBlogsJSON(request, response);
+                this.getBlogsJACKSON(request, response);
                 return;
             }else
             {
@@ -54,7 +54,7 @@ public class BlogController extends HttpServlet
     }
 
 
-    private void getBlogsJSON(HttpServletRequest request, HttpServletResponse response) throws IOException
+    private void getBlogsJACKSON(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         String pageParam = request.getParameter("page");
         int page = 1;
@@ -71,11 +71,11 @@ public class BlogController extends HttpServlet
         }
 
         List<Blog> blogs = this.blogService.getBlogs(page, PAGE_SIZE);
-        String json = gson.toJson(blogs);
+        String jackson = mapper.writeValueAsString(blogs);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+        response.getWriter().write(jackson);
     }
 
     private void getBlogsByPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

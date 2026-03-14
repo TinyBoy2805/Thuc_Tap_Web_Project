@@ -21,6 +21,7 @@ public class BlogDetailController extends HttpServlet {
         String action = request.getParameter("action");
         String idStr = request.getParameter("id");
         if ("delete".equals(action)) {
+            //
             try {
                 int id = Integer.parseInt(idStr);
                 BlogDAO.deleteBlogById(id);
